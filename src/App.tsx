@@ -7,6 +7,7 @@
 import { ModSearch } from './components/ModSearch'
 import { ModList } from './components/ModList'
 import { SearchResults } from './components/SearchResults'
+import { ExportPanel } from './components/ExportPanel'
 
 function App() {
   return (
@@ -41,28 +42,6 @@ function App() {
               </p>
             </div>
           </div>
-
-          {/* Export button placeholder */}
-          <button
-            className="btn btn-primary"
-            aria-label="Export modpack"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
-            Export
-          </button>
         </div>
       </header>
 
@@ -82,7 +61,16 @@ function App() {
 
           {/* Selected Mods Column */}
           <aside className="lg:col-span-1">
-            <div className="sticky top-24">
+            <div className="sticky top-24 space-y-4">
+              {/* Export Panel */}
+              <section
+                aria-label="Export options"
+                className="card-elevated p-4 rounded-2xl"
+              >
+                <ExportPanel />
+              </section>
+
+              {/* Mod List */}
               <section
                 aria-label="Selected mods"
                 className="card-elevated p-4 rounded-2xl"
