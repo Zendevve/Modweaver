@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Reference repos
+refs/
+
 # Build output
 dist/
 .netlify/
