@@ -64,6 +64,21 @@ function normalizeLoader(loader: string): ModLoader | null {
 
 /** Convert Modrinth project to unified Mod interface */
 function toMod(project: ModrinthProject): Mod {
+  // Loaders might be in 'loaders' array OR embedded in 'categories'
+  // Search results include loaders in categories, not as separate field
+  const loaderNames = ['fabric', 'forge', 'neoforge', 'quilt']
+  const loadersFromCategories = (project.categories || [])
+    .filter(cat => loaderNames.includes(cat.toLowerCase()))
+    .map(normalizeLoader)
+    .filter((l): l is ModLoader => l !== null)
+
+  const loadersFromField = (project.loaders || [])
+    .map(normalizeLoader)
+    .filter((l): l is ModLoader => l !== null)
+
+  // Use whichever has values
+  const loaders = loadersFromField.length > 0 ? loadersFromField : loadersFromCategories
+
   return {
     id: project.project_id,
     source: 'modrinth',
@@ -74,11 +89,9 @@ function toMod(project: ModrinthProject): Mod {
     iconUrl: project.icon_url,
     downloads: project.downloads,
     updatedAt: project.date_modified,
-    loaders: project.loaders
-      .map(normalizeLoader)
-      .filter((l): l is ModLoader => l !== null),
-    gameVersions: project.versions,
-    categories: project.categories,
+    loaders,
+    gameVersions: project.versions || [],
+    categories: project.categories || [],
     pageUrl: `https://modrinth.com/mod/${project.slug}`,
   }
 }
@@ -117,31 +130,53 @@ function toModVersion(version: ModrinthVersion): ModVersion {
  * Search for mods on Modrinth
  */
 export async function searchMods(params: SearchParams): Promise<Mod[]> {
-  const facets: string[][] = [['project_type:mod']]
+  // Build facets array - Modrinth uses nested arrays for AND/OR logic
+  // Outer array = AND, inner arrays = OR
+  const facets: string[][] = []
 
+  // Always filter to mods only
+  facets.push(['project_type:mod'])
+
+  // Add loader filter if specified
   if (params.loader) {
     facets.push([`categories:${params.loader}`])
   }
 
+  // Add version filter if specified
   if (params.gameVersion) {
     facets.push([`versions:${params.gameVersion}`])
   }
 
-  const searchParams = new URLSearchParams({
-    query: params.query,
-    facets: JSON.stringify(facets),
-    limit: String(params.limit ?? 20),
-    offset: String(params.offset ?? 0),
-  })
+  // Build URL manually to avoid double-encoding
+  const queryParts: string[] = []
 
-  const response = await fetch(`${MODRINTH_API}/search?${searchParams}`)
-
-  if (!response.ok) {
-    throw new Error(`Modrinth search failed: ${response.status}`)
+  if (params.query) {
+    queryParts.push(`query=${encodeURIComponent(params.query)}`)
   }
 
-  const data = await response.json() as { hits: ModrinthProject[] }
-  return data.hits.map(toMod)
+  queryParts.push(`facets=${encodeURIComponent(JSON.stringify(facets))}`)
+  queryParts.push(`limit=${params.limit ?? 20}`)
+  queryParts.push(`offset=${params.offset ?? 0}`)
+
+  const url = `${MODRINTH_API}/search?${queryParts.join('&')}`
+  console.log('[Modrinth] Request:', url)
+
+  try {
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      const text = await response.text()
+      console.error('[Modrinth] API error:', response.status, text)
+      throw new Error(`Modrinth search failed: ${response.status}`)
+    }
+
+    const data = await response.json() as { hits: ModrinthProject[] }
+    console.log('[Modrinth] Found', data.hits.length, 'results')
+    return data.hits.map(toMod)
+  } catch (error) {
+    console.error('[Modrinth] Fetch error:', error)
+    throw error
+  }
 }
 
 /**
