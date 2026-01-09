@@ -1,7 +1,6 @@
 /**
  * ModSearch Component
- * Search input with loader and version filters
- * Follows Apple HIG: 44pt touch targets, proper spacing, accessible
+ * Linear/Modern design - clean inputs with proper tokens
  */
 
 import { useCallback, useState, useEffect } from 'react'
@@ -34,15 +33,21 @@ export function ModSearch() {
   }, [])
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {/* Search Input */}
-      <div className="relative">
+      <div style={{ position: 'relative' }}>
         <label htmlFor="mod-search" className="sr-only">
           Search mods
         </label>
-        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+        <div style={{
+          position: 'absolute',
+          left: '16px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          pointerEvents: 'none'
+        }}>
           <svg
-            className="w-5 h-5 text-[var(--color-label-tertiary)]"
+            style={{ width: '18px', height: '18px', color: 'var(--foreground-subtle)' }}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -59,10 +64,15 @@ export function ModSearch() {
         <input
           id="mod-search"
           type="search"
-          placeholder="Search mods..."
+          placeholder="Search mods across Modrinth & CurseForge..."
           value={localQuery}
           onChange={handleQueryChange}
-          className="input w-full pl-12 pr-4"
+          className="input"
+          style={{
+            width: '100%',
+            paddingLeft: '48px',
+            fontSize: '15px'
+          }}
           autoComplete="off"
           autoCorrect="off"
           spellCheck="false"
@@ -70,9 +80,9 @@ export function ModSearch() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3">
+      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
         {/* Loader Select */}
-        <div className="flex-1 min-w-[140px]">
+        <div style={{ flex: 1, minWidth: '140px' }}>
           <label htmlFor="loader-select" className="sr-only">
             Mod Loader
           </label>
@@ -80,7 +90,16 @@ export function ModSearch() {
             id="loader-select"
             value={loader}
             onChange={(e) => setLoader(e.target.value as typeof loader)}
-            className="input w-full appearance-none cursor-pointer"
+            className="input"
+            style={{
+              width: '100%',
+              appearance: 'none',
+              cursor: 'pointer',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8F98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 12px center',
+              paddingRight: '40px'
+            }}
             aria-label="Select mod loader"
           >
             {MOD_LOADERS.map((l) => (
@@ -92,7 +111,7 @@ export function ModSearch() {
         </div>
 
         {/* Version Select */}
-        <div className="flex-1 min-w-[140px]">
+        <div style={{ flex: 1, minWidth: '140px' }}>
           <label htmlFor="version-select" className="sr-only">
             Minecraft Version
           </label>
@@ -100,7 +119,16 @@ export function ModSearch() {
             id="version-select"
             value={gameVersion}
             onChange={(e) => setGameVersion(e.target.value)}
-            className="input w-full appearance-none cursor-pointer"
+            className="input"
+            style={{
+              width: '100%',
+              appearance: 'none',
+              cursor: 'pointer',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8F98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 12px center',
+              paddingRight: '40px'
+            }}
             aria-label="Select Minecraft version"
           >
             {MINECRAFT_VERSIONS.map((v) => (

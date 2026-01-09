@@ -1,6 +1,6 @@
 /**
  * Editor Page - The modpack building interface
- * Moved from App.tsx to be a dedicated page within the Suite
+ * Linear/Modern design with search and mod management
  */
 
 import { ModSearch } from '@/components/ModSearch'
@@ -12,9 +12,13 @@ export function Editor() {
   return (
     <div className="editor">
       <header className="editor-header">
+        <span className="section-label">
+          <span>✏️</span>
+          Editor
+        </span>
         <h1 className="editor-title">Modpack Editor</h1>
-        <p className="text-[var(--color-label-secondary)]">
-          Search and add mods to your pack
+        <p style={{ color: 'var(--foreground-muted)', margin: 0, fontSize: '15px' }}>
+          Search for mods and build your perfect modpack.
         </p>
       </header>
 
@@ -32,23 +36,35 @@ export function Editor() {
 
         {/* Sidebar */}
         <aside className="editor-sidebar">
-          <div className="sticky top-6 space-y-4">
-            {/* Export Panel */}
-            <section
-              aria-label="Export options"
-              className="card-elevated p-4 rounded-2xl"
-            >
-              <ExportPanel />
-            </section>
+          {/* Export Panel */}
+          <section aria-label="Export options" className="card-static" style={{ padding: '20px' }}>
+            <h3 style={{
+              fontSize: '14px',
+              fontWeight: 600,
+              color: 'var(--foreground-muted)',
+              margin: '0 0 16px 0',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Export
+            </h3>
+            <ExportPanel />
+          </section>
 
-            {/* Mod List */}
-            <section
-              aria-label="Selected mods"
-              className="card-elevated p-4 rounded-2xl"
-            >
-              <ModList />
-            </section>
-          </div>
+          {/* Mod List */}
+          <section aria-label="Selected mods" className="card-static" style={{ padding: '20px' }}>
+            <h3 style={{
+              fontSize: '14px',
+              fontWeight: 600,
+              color: 'var(--foreground-muted)',
+              margin: '0 0 16px 0',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Your Pack
+            </h3>
+            <ModList />
+          </section>
         </aside>
       </div>
     </div>
