@@ -1,7 +1,7 @@
 /**
  * ModList Component
- * Displays selected mods with remove functionality
- * Follows Apple HIG: accessible, proper spacing, clear hierarchy
+ * Aesthetic: Digital Craftsman's Workshop
+ * Displays selected mods as a "Bill of Materials"
  */
 
 import { useModpackStore } from '@/lib/state/store'
@@ -11,86 +11,171 @@ export function ModList() {
 
   if (mods.length === 0) {
     return (
-      <div className="text-center py-12 px-4">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--color-bg-secondary)] flex items-center justify-center">
-          <svg
-            className="w-8 h-8 text-[var(--color-label-tertiary)]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-            />
-          </svg>
+      <div className="text-center py-12 px-4" style={{
+        border: '2px dashed var(--border-default)',
+        borderRadius: '12px',
+        background: 'var(--bg-surface)'
+      }}>
+        <div style={{
+          width: '64px',
+          height: '64px',
+          margin: '0 auto 16px',
+          borderRadius: '50%',
+          background: 'var(--bg-elevated)',
+          flex: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'
+        }}>
+          <span style={{ fontSize: '32px', opacity: 0.5 }}>📝</span>
         </div>
-        <h3 className="text-headline text-[var(--color-label-primary)] mb-2">
-          No mods selected
+        <h3 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '18px',
+          color: 'var(--text-primary)',
+          margin: '0 0 8px 0'
+        }}>
+          Empty List
         </h3>
-        <p className="text-subheadline text-[var(--color-label-secondary)]">
-          Search and click mods to add them to your modpack
+        <p style={{
+          color: 'var(--text-secondary)',
+          fontSize: '15px'
+        }}>
+          Search and find components to add to your bill of materials.
         </p>
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-title3 font-semibold text-[var(--color-label-primary)]">
-          Selected Mods ({mods.length})
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2 style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'var(--text-secondary)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em'
+        }}>
+          Components ({mods.length})
         </h2>
         <button
           onClick={clearMods}
-          className="text-subheadline text-[var(--color-error)] hover:underline touch-target flex items-center justify-center"
+          style={{
+            fontSize: '13px',
+            color: 'var(--error)',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px 8px',
+            opacity: 0.8,
+            transition: 'opacity 200ms'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
           aria-label="Remove all mods"
         >
-          Clear All
+          Scrap All
         </button>
       </div>
 
       {/* Mod List */}
-      <ul className="space-y-2" role="list" aria-label="Selected mods">
+      <ul style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        margin: 0,
+        padding: 0,
+        listStyle: 'none'
+      }} role="list" aria-label="Selected mods">
         {mods.map(({ mod, version }) => (
           <li
             key={mod.id}
-            className="card flex items-center gap-3 p-3"
+            className="card"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '12px',
+              borderRadius: '8px',
+              borderLeft: '3px solid var(--accent)'
+            }}
           >
             {/* Icon */}
-            {mod.iconUrl ? (
-              <img
-                src={mod.iconUrl}
-                alt=""
-                className="w-10 h-10 rounded-lg object-cover bg-[var(--color-bg-secondary)]"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-lg bg-[var(--color-bg-secondary)]" />
-            )}
+            <div style={{ flexShrink: 0 }}>
+              {mod.iconUrl ? (
+                <img
+                  src={mod.iconUrl}
+                  alt=""
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '8px',
+                    objectFit: 'cover',
+                    background: 'var(--bg-elevated)'
+                  }}
+                  loading="lazy"
+                />
+              ) : (
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  background: 'var(--bg-elevated)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }} />
+              )}
+            </div>
 
             {/* Info */}
-            <div className="flex-1 min-w-0">
-              <p className="text-body font-medium text-[var(--color-label-primary)] truncate">
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '15px',
+                fontWeight: 500,
+                color: 'var(--text-primary)',
+                margin: '0 0 2px 0',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
                 {mod.name}
               </p>
-              <p className="text-caption1 text-[var(--color-label-secondary)]">
-                {version.versionNumber}
+              <p style={{
+                fontSize: '13px',
+                color: 'var(--text-secondary)',
+                fontFamily: 'monospace',
+                margin: 0
+              }}>
+                v{version.versionNumber}
               </p>
             </div>
 
             {/* Remove Button */}
             <button
               onClick={() => removeMod(mod.id)}
-              className="touch-target flex items-center justify-center text-[var(--color-label-tertiary)] hover:text-[var(--color-error)] transition-colors"
+              style={{
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                transition: 'color 200ms'
+              }}
               aria-label={`Remove ${mod.name}`}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--error)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
             >
               <svg
-                className="w-5 h-5"
+                style={{ width: '18px', height: '18px' }}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

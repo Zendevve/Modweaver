@@ -1,6 +1,7 @@
 /**
  * ModCard Component
- * Linear/Modern design - horizontal card with clean action button
+ * Aesthetic: Digital Craftsman's Workshop
+ * Looks like a recipe card or schematic
  */
 
 import type { Mod } from '@/lib/api/types'
@@ -35,14 +36,15 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
     <article
       className="card"
       style={{
-        padding: '16px',
+        padding: '18px',
         cursor: 'pointer',
         display: 'flex',
-        gap: '16px',
+        gap: '18px',
         alignItems: 'flex-start',
+        border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-default)',
+        background: isSelected ? 'var(--bg-surface-hover)' : 'var(--bg-surface)',
         ...(isSelected ? {
-          borderColor: 'var(--accent)',
-          boxShadow: 'var(--shadow-card-hover)'
+          boxShadow: 'var(--shadow-md)'
         } : {})
       }}
       onClick={handleClick}
@@ -50,7 +52,7 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && handleClick()}
       aria-pressed={isSelected}
-      aria-label={`${mod.name} by ${mod.author}. ${isSelected ? 'Remove from' : 'Add to'} modpack`}
+      aria-label={`${mod.name} by ${mod.author}. ${isSelected ? 'Remove from' : 'Add to'} blueprint`}
     >
       {/* Icon */}
       <div style={{ flexShrink: 0 }}>
@@ -59,26 +61,28 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
             src={mod.iconUrl}
             alt=""
             style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '10px',
+              width: '52px',
+              height: '52px',
+              borderRadius: '12px',
               objectFit: 'cover',
-              background: 'var(--background-elevated)'
+              background: 'var(--bg-elevated)',
+              boxShadow: 'var(--shadow-sm)'
             }}
             loading="lazy"
           />
         ) : (
           <div style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '10px',
-            background: 'var(--background-elevated)',
+            width: '52px',
+            height: '52px',
+            borderRadius: '12px',
+            background: 'var(--bg-elevated)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            border: '1px solid var(--border-default)'
           }}>
             <svg
-              style={{ width: '24px', height: '24px', color: 'var(--foreground-subtle)' }}
+              style={{ width: '28px', height: '28px', color: 'var(--text-muted)' }}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -87,7 +91,7 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
               />
             </svg>
@@ -98,10 +102,11 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
       {/* Content */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3 style={{
-          fontSize: '16px',
+          fontFamily: 'var(--font-display)',
+          fontSize: '18px',
           fontWeight: 600,
-          color: 'var(--foreground)',
-          margin: 0,
+          color: 'var(--text-primary)',
+          margin: '0 0 4px 0',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis'
@@ -109,17 +114,18 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
           {mod.name}
         </h3>
         <p style={{
-          fontSize: '13px',
-          color: 'var(--foreground-muted)',
-          margin: '2px 0 6px 0'
+          fontSize: '14px',
+          color: 'var(--text-secondary)',
+          margin: '0 0 8px 0',
+          fontStyle: 'italic'
         }}>
-          by {mod.author}
+          by <span style={{ color: 'var(--text-primary)' }}>{mod.author}</span>
         </p>
         <p style={{
-          fontSize: '14px',
-          color: 'var(--foreground-muted)',
+          fontSize: '15px',
+          color: 'var(--text-secondary)',
           margin: 0,
-          lineHeight: 1.5,
+          lineHeight: 1.6,
           display: '-webkit-box',
           WebkitLineClamp: 2,
           WebkitBoxOrient: 'vertical',
@@ -132,16 +138,17 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '8px',
-          marginTop: '10px',
+          gap: '10px',
+          marginTop: '12px',
           flexWrap: 'wrap'
         }}>
           <span style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
-            fontSize: '12px',
-            color: 'var(--foreground-subtle)'
+            gap: '6px',
+            fontSize: '13px',
+            color: 'var(--text-muted)',
+            fontFamily: 'monospace'
           }}>
             <svg style={{ width: '14px', height: '14px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -151,11 +158,12 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
           <span style={{
             fontSize: '11px',
             textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            padding: '3px 8px',
-            borderRadius: '4px',
-            background: mod.source === 'modrinth' ? 'rgba(30, 200, 100, 0.15)' : 'rgba(246, 130, 52, 0.15)',
-            color: mod.source === 'modrinth' ? '#1ec864' : '#f68234'
+            letterSpacing: '0.05em',
+            padding: '4px 10px',
+            borderRadius: '6px',
+            background: mod.source === 'modrinth' ? 'rgba(124, 179, 107, 0.15)' : 'rgba(212, 160, 86, 0.15)',
+            color: mod.source === 'modrinth' ? '#7cb36b' : '#d4a056',
+            fontWeight: 600
           }}>
             {mod.source}
           </span>
@@ -163,12 +171,13 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
             <span
               key={loader}
               style={{
-                fontSize: '11px',
+                fontSize: '12px',
                 textTransform: 'capitalize',
-                padding: '3px 8px',
-                borderRadius: '4px',
-                background: 'var(--background-surface)',
-                color: 'var(--foreground-muted)'
+                padding: '4px 10px',
+                borderRadius: '6px',
+                background: 'var(--bg-elevated)',
+                color: 'var(--text-secondary)',
+                border: '1px solid var(--border-default)'
               }}
             >
               {loader}
@@ -181,25 +190,25 @@ export function ModCard({ mod, onSelect }: ModCardProps) {
       <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
         <div
           style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '8px',
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: isSelected ? 'var(--accent)' : 'var(--background-surface)',
-            color: isSelected ? 'white' : 'var(--foreground-muted)',
+            background: isSelected ? 'var(--accent)' : 'transparent',
+            color: isSelected ? 'var(--bg-deep)' : 'var(--text-muted)',
             border: isSelected ? 'none' : '1px solid var(--border-default)',
             transition: 'all 200ms cubic-bezier(0.16, 1, 0.3, 1)'
           }}
           aria-hidden="true"
         >
           {isSelected ? (
-            <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           ) : (
-            <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
           )}

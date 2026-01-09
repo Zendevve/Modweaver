@@ -1,6 +1,6 @@
 /**
  * Dashboard Page - The main hub after signing in
- * Linear/Modern design with pack cards grid
+ * Aesthetic: Digital Craftsman's Workshop
  */
 
 import { Link } from 'react-router-dom'
@@ -13,7 +13,7 @@ export function Dashboard() {
   const packs = [
     {
       id: 'current',
-      name: config.name || 'My First Pack',
+      name: config.name || 'Untitled Project',
       version: config.minecraftVersion,
       loader: config.loader,
       modCount: mods.length,
@@ -33,24 +33,24 @@ export function Dashboard() {
       <header className="dashboard-header">
         <div>
           <span className="section-label">
-            <span>📦</span>
-            Modpacks
+            <span>🗄️</span>
+            Archive
           </span>
-          <h1 className="dashboard-title">My Modpacks</h1>
+          <h1 className="dashboard-title">My Blueprints</h1>
         </div>
         <Link to="/editor/new" className="btn btn-primary">
-          <span>✨</span> New Pack
+          <span>✨</span> New Project
         </Link>
       </header>
 
       {/* Packs Grid */}
       {packs.length === 0 && mods.length === 0 ? (
-        <div className="dashboard-empty">
-          <div className="empty-icon">📦</div>
-          <h2>No modpacks yet</h2>
-          <p>Create your first modpack to get started building something amazing.</p>
+        <div className="dashboard-empty card">
+          <div className="empty-icon">📜</div>
+          <h2>The Archive is Empty</h2>
+          <p>Draft your first blueprint to begin your journey.</p>
           <Link to="/editor/new" className="btn btn-primary btn-lg">
-            Create Your First Pack
+            Draft New Blueprint
           </Link>
         </div>
       ) : (
@@ -67,23 +67,23 @@ export function Dashboard() {
               <div className="pack-info">
                 <h3 className="pack-name">{pack.name}</h3>
                 <p className="pack-meta">
-                  {pack.version} • {pack.loader} • {pack.modCount} mod{pack.modCount !== 1 ? 's' : ''}
+                  {pack.version} • {pack.loader} • {pack.modCount} component{pack.modCount !== 1 ? 's' : ''}
                 </p>
               </div>
               {pack.isLocal && (
-                <span className="pack-badge">Local</span>
+                <span className="pack-badge">Draft</span>
               )}
             </Link>
           ))}
 
           {/* Create New Card */}
           <Link to="/editor/new" className="pack-card pack-card-new">
-            <div className="pack-icon" style={{ background: 'transparent', border: 'none' }}>
+            <div className="pack-icon" style={{ background: 'transparent', border: 'none', boxShadow: 'none' }}>
               ➕
             </div>
             <div className="pack-info">
-              <h3 className="pack-name">New Modpack</h3>
-              <p className="pack-meta">Start fresh with a new project</p>
+              <h3 className="pack-name" style={{ color: 'var(--text-muted)' }}>New Blueprint</h3>
+              <p className="pack-meta">Start a fresh design</p>
             </div>
           </Link>
         </div>

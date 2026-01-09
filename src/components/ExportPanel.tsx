@@ -1,7 +1,7 @@
 /**
  * ExportPanel Component
- * Export modpack to various formats with format selector
- * Follows Apple HIG: accessible buttons, loading states
+ * Aesthetic: Digital Craftsman's Workshop
+ * 'Publish' buttons and format selection
  */
 
 import { useState } from 'react'
@@ -13,10 +13,10 @@ import { generateShareURL, copyToClipboard } from '@/lib/state/url-state'
 
 type ExportFormat = 'mrpack' | 'curseforge' | 'packwiz'
 
-const FORMAT_INFO: Record<ExportFormat, { label: string; description: string }> = {
-  mrpack: { label: '.mrpack (Modrinth)', description: 'Best for Modrinth Launcher, Prism, ATLauncher' },
-  curseforge: { label: 'CurseForge ZIP', description: 'Best for CurseForge app, MultiMC' },
-  packwiz: { label: 'Packwiz', description: 'Best for servers and auto-updating' },
+const FORMAT_INFO: Record<ExportFormat, { label: string; description: string; icon: string }> = {
+  mrpack: { label: '.mrpack', description: 'Standard blueprint (Modrinth/Prism)', icon: '🟢' },
+  curseforge: { label: 'CurseForge', description: 'Legacy format export', icon: '🟠' },
+  packwiz: { label: 'Packwiz', description: 'Server-ready manifesto', icon: '📦' },
 }
 
 export function ExportPanel() {
@@ -79,44 +79,69 @@ export function ExportPanel() {
   const cfCount = mods.filter(m => m.mod.source === 'curseforge').length
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Format Selector */}
       <div>
         <label htmlFor="export-format" className="sr-only">Export Format</label>
-        <select
-          id="export-format"
-          value={format}
-          onChange={(e) => setFormat(e.target.value as ExportFormat)}
-          className="input w-full"
-          aria-label="Select export format"
-        >
-          {Object.entries(FORMAT_INFO).map(([key, { label }]) => (
-            <option key={key} value={key}>{label}</option>
-          ))}
-        </select>
-        <p className="text-caption2 text-[var(--color-label-tertiary)] mt-1">
+        <div style={{ position: 'relative' }}>
+          <select
+            id="export-format"
+            value={format}
+            onChange={(e) => setFormat(e.target.value as ExportFormat)}
+            className="input"
+            style={{
+              width: '100%',
+              cursor: 'pointer',
+              appearance: 'none',
+              paddingRight: '40px',
+              fontFamily: 'var(--font-display)',
+              fontSize: '15px'
+            }}
+            aria-label="Select export format"
+          >
+            {Object.entries(FORMAT_INFO).map(([key, { label, icon }]) => (
+              <option key={key} value={key}>{icon} {label}</option>
+            ))}
+          </select>
+          <div style={{
+            position: 'absolute',
+            right: '12px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            pointerEvents: 'none',
+            color: 'var(--text-muted)'
+          }}>
+            ▼
+          </div>
+        </div>
+        <p style={{
+          fontSize: '13px',
+          color: 'var(--text-muted)',
+          marginTop: '6px',
+          fontStyle: 'italic'
+        }}>
           {FORMAT_INFO[format].description}
         </p>
       </div>
 
       {/* Export Buttons */}
-      <div className="flex flex-wrap gap-3">
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
         <button
           onClick={handleExport}
           disabled={mods.length === 0 || isExporting}
-          className="btn btn-primary flex-1 min-w-[140px]"
+          className="btn btn-primary"
+          style={{ flex: 1, minWidth: '140px' }}
           aria-label={`Export as ${FORMAT_INFO[format].label}`}
         >
           {isExporting ? (
             <>
               <svg
-                className="w-5 h-5 mr-2 animate-spin"
+                style={{ width: '20px', height: '20px', animation: 'spin 1s linear infinite', marginRight: '8px' }}
                 fill="none"
                 viewBox="0 0 24 24"
-                aria-hidden="true"
               >
                 <circle
-                  className="opacity-25"
+                  style={{ opacity: 0.25 }}
                   cx="12"
                   cy="12"
                   r="10"
@@ -124,30 +149,17 @@ export function ExportPanel() {
                   strokeWidth="4"
                 />
                 <path
-                  className="opacity-75"
+                  style={{ opacity: 0.75 }}
                   fill="currentColor"
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                 />
               </svg>
-              Exporting...
+              Forging...
             </>
           ) : (
             <>
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-              Export
+              <span style={{ fontSize: '18px' }}>⚒️</span>
+              Export .ZIP
             </>
           )}
         </button>
@@ -155,46 +167,48 @@ export function ExportPanel() {
         <button
           onClick={handleShare}
           disabled={mods.length === 0}
-          className="btn btn-secondary flex-1 min-w-[140px]"
+          className="btn btn-secondary"
+          style={{ flex: 1, minWidth: '140px' }}
           aria-label="Generate share link"
         >
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-            />
-          </svg>
-          Share
+          <span style={{ fontSize: '18px' }}>🔗</span>
+          Share Link
         </button>
       </div>
 
       {/* Share URL Display */}
       {shareURL && (
-        <div className="card p-3 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-caption1 text-[var(--color-label-secondary)]">
-              Share URL
+        <div className="card" style={{ padding: '12px', background: 'var(--bg-elevated)', borderStyle: 'dashed' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Public Link
             </span>
             <button
               onClick={handleCopy}
-              className="text-caption1 text-[var(--color-accent)] hover:underline"
+              style={{
+                fontSize: '12px',
+                color: 'var(--accent-bright)',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                fontWeight: 600
+              }}
             >
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? 'COPIED' : 'COPY'}
             </button>
           </div>
           <input
             type="text"
             value={shareURL}
             readOnly
-            className="input w-full text-caption1"
+            className="input"
+            style={{
+              width: '100%',
+              fontSize: '13px',
+              padding: '8px 12px',
+              height: '36px',
+              fontFamily: 'monospace'
+            }}
             onClick={(e) => e.currentTarget.select()}
           />
         </div>
@@ -202,19 +216,23 @@ export function ExportPanel() {
 
       {/* Stats */}
       {mods.length > 0 && (
-        <div className="text-caption1 text-[var(--color-label-tertiary)]">
-          {modrinthCount > 0 && (
-            <span className="mr-3">
-              {modrinthCount} Modrinth
-            </span>
-          )}
-          {cfCount > 0 && (
-            <span>
-              {cfCount} CurseForge
-            </span>
-          )}
+        <div style={{
+          fontSize: '13px',
+          color: 'var(--text-muted)',
+          textAlign: 'center',
+          borderTop: '1px solid var(--border-default)',
+          paddingTop: '16px'
+        }}>
+          Sourced from <span style={{ color: '#7cb36b' }}>{modrinthCount} Modrinth</span> & <span style={{ color: '#d4a056' }}>{cfCount} CurseForge</span>
         </div>
       )}
+
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   )
 }

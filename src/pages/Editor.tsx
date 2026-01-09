@@ -1,6 +1,6 @@
 /**
  * Editor Page - The modpack building interface
- * Linear/Modern design with search and mod management
+ * Aesthetic: Digital Craftsman's Workshop
  */
 
 import { ModSearch } from '@/components/ModSearch'
@@ -13,23 +13,23 @@ export function Editor() {
     <div className="editor">
       <header className="editor-header">
         <span className="section-label">
-          <span>✏️</span>
-          Editor
+          <span>⚒️</span>
+          Workbench
         </span>
-        <h1 className="editor-title">Modpack Editor</h1>
-        <p style={{ color: 'var(--foreground-muted)', margin: 0, fontSize: '15px' }}>
-          Search for mods and build your perfect modpack.
+        <h1 className="editor-title">Project Workspace</h1>
+        <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '16px' }}>
+          Assemble the components for your masterpiece.
         </p>
       </header>
 
       <div className="editor-content">
         {/* Search Column */}
         <div className="editor-search">
-          <section aria-label="Mod search">
+          <section aria-label="Component search">
             <ModSearch />
           </section>
 
-          <section aria-label="Search results">
+          <section aria-label="Available components">
             <SearchResults />
           </section>
         </div>
@@ -37,31 +37,37 @@ export function Editor() {
         {/* Sidebar */}
         <aside className="editor-sidebar">
           {/* Export Panel */}
-          <section aria-label="Export options" className="card-static" style={{ padding: '20px' }}>
+          <section aria-label="Export options" className="card-static" style={{ padding: '24px' }}>
             <h3 style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: 'var(--foreground-muted)',
-              margin: '0 0 16px 0',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em'
+              fontFamily: 'var(--font-display)',
+              fontSize: '18px',
+              fontWeight: 500,
+              color: 'var(--text-primary)',
+              margin: '0 0 20px 0',
+              borderBottom: '1px solid var(--border-default)',
+              paddingBottom: '12px'
             }}>
-              Export
+              Export / Publish
             </h3>
             <ExportPanel />
           </section>
 
           {/* Mod List */}
-          <section aria-label="Selected mods" className="card-static" style={{ padding: '20px' }}>
+          <section aria-label="Selected components" className="card-static" style={{ padding: '24px' }}>
             <h3 style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: 'var(--foreground-muted)',
-              margin: '0 0 16px 0',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em'
+              fontFamily: 'var(--font-display)',
+              fontSize: '18px',
+              fontWeight: 500,
+              color: 'var(--text-primary)',
+              margin: '0 0 20px 0',
+              borderBottom: '1px solid var(--border-default)',
+              paddingBottom: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
             }}>
-              Your Pack
+              <span>Bill of Materials</span>
+              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Active</span>
             </h3>
             <ModList />
           </section>

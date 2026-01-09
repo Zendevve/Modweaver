@@ -1,7 +1,7 @@
 /**
  * SuiteLayout - The main shell for authenticated users
- * Professional sidebar navigation with user context
- * Works in dev mode without Clerk
+ * Aesthetic: Digital Craftsman's Workshop
+ * Sidebar navigation with user context
  */
 
 import { useState } from 'react'
@@ -15,16 +15,16 @@ const hasValidClerkKey = CLERK_PUBLISHABLE_KEY &&
   CLERK_PUBLISHABLE_KEY.startsWith('pk_')
 
 const navItems = [
-  { to: '/dashboard', label: 'My Packs', icon: '📦' },
-  { to: '/editor/new', label: 'New Pack', icon: '✨' },
-  { to: '/explore', label: 'Explore', icon: '🔍' },
+  { to: '/dashboard', label: 'My Blueprints', icon: '📜' },
+  { to: '/editor/new', label: 'New Project', icon: '✨' },
+  { to: '/explore', label: 'Inspiration', icon: '🔭' },
 ]
 
 export function SuiteLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   return (
-    <div className="suite-shell">
+    <div className="suite-shell texture-paper">
       {/* Sidebar */}
       <aside className={`suite-sidebar ${sidebarOpen ? 'open' : 'collapsed'}`}>
         <div className="sidebar-header">
@@ -35,6 +35,7 @@ export function SuiteLayout() {
           >
             {sidebarOpen ? '◀' : '▶'}
           </button>
+
           {sidebarOpen && (
             <h1 className="suite-logo">
               <span className="logo-icon">🧵</span>
@@ -64,14 +65,15 @@ export function SuiteLayout() {
               afterSignOutUrl="/"
               appearance={{
                 elements: {
-                  avatarBox: 'w-10 h-10'
+                  avatarBox: 'w-10 h-10',
+                  userButtonPopoverCard: 'card',
                 }
               }}
             />
           ) : (
-            <div className="dev-mode-badge">
+            <div className="dev-mode-badge" title="Authentication disabled in local dev">
               <span>🛠️</span>
-              {sidebarOpen && <span className="user-label">Dev Mode</span>}
+              {sidebarOpen && <span className="user-label">Local Forge</span>}
             </div>
           )}
         </div>

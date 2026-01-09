@@ -1,7 +1,7 @@
 /**
  * SearchResults Component
- * Displays search results from Modrinth and CurseForge
- * Uses React Query for data fetching with caching
+ * Aesthetic: Digital Craftsman's Workshop
+ * Displays search results as component cards
  */
 
 import { useQuery } from '@tanstack/react-query'
@@ -26,9 +26,6 @@ export function SearchResults() {
     staleTime: 1000 * 60 * 5, // 5 minutes
   })
 
-  // TODO: Add CurseForge search when API key is configured
-  // const curseforgeQuery = useQuery({...})
-
   // Handle mod selection - fetch version and add to pack
   const handleSelectMod = async (mod: Mod) => {
     try {
@@ -50,20 +47,18 @@ export function SearchResults() {
   // Loading state
   if (modrinthQuery.isLoading) {
     return (
-      <div className="space-y-3" role="status" aria-label="Loading search results">
+      <div className="space-y-3" role="status" aria-label="Loading search results" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="card p-4 animate-pulse">
-            <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-lg bg-[var(--color-bg-tertiary)]" />
-              <div className="flex-1 space-y-2">
-                <div className="h-5 w-1/3 rounded bg-[var(--color-bg-tertiary)]" />
-                <div className="h-4 w-1/4 rounded bg-[var(--color-bg-tertiary)]" />
-                <div className="h-4 w-full rounded bg-[var(--color-bg-tertiary)]" />
-              </div>
+          <div key={i} className="card" style={{ padding: '16px', display: 'flex', gap: '16px', opacity: 0.6 }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'var(--bg-elevated)' }} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ height: '20px', width: '30%', background: 'var(--bg-elevated)', borderRadius: '4px' }} />
+              <div style={{ height: '16px', width: '20%', background: 'var(--bg-elevated)', borderRadius: '4px' }} />
+              <div style={{ height: '16px', width: '100%', background: 'var(--bg-elevated)', borderRadius: '4px' }} />
             </div>
           </div>
         ))}
-        <span className="sr-only">Loading...</span>
+        <span className="sr-only">Searching archives...</span>
       </div>
     )
   }
@@ -71,34 +66,25 @@ export function SearchResults() {
   // Error state
   if (modrinthQuery.isError) {
     return (
-      <div className="card p-6 text-center" role="alert">
-        <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[var(--color-error)]/10 flex items-center justify-center">
-          <svg
-            className="w-6 h-6 text-[var(--color-error)]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
+      <div className="card" style={{ padding: '24px', textAlign: 'center', borderColor: 'var(--error)' }} role="alert">
+        <div style={{
+          width: '56px', height: '56px', margin: '0 auto 16px',
+          borderRadius: '50%', background: 'rgba(196, 92, 74, 0.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <span style={{ fontSize: '28px' }}>⚠️</span>
         </div>
-        <h3 className="text-headline text-[var(--color-label-primary)] mb-2">
-          Search failed
+        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', margin: '0 0 8px 0', color: 'var(--text-primary)' }}>
+          Search Malfunction
         </h3>
-        <p className="text-subheadline text-[var(--color-label-secondary)]">
-          Unable to fetch mods. Please try again.
+        <p style={{ color: 'var(--text-secondary)', margin: '0 0 16px 0' }}>
+          Unable to retrieve components from the archives.
         </p>
         <button
           onClick={() => modrinthQuery.refetch()}
-          className="btn btn-secondary mt-4"
+          className="btn btn-secondary"
         >
-          Retry
+          Retry Connection
         </button>
       </div>
     )
@@ -107,28 +93,12 @@ export function SearchResults() {
   // Empty query state
   if (searchQuery.length < 2) {
     return (
-      <div className="text-center py-12 px-4">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--color-bg-secondary)] flex items-center justify-center">
-          <svg
-            className="w-8 h-8 text-[var(--color-label-tertiary)]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <h3 className="text-headline text-[var(--color-label-primary)] mb-2">
-          Search for mods
+      <div style={{ textAlign: 'center', padding: '48px 16px', border: '1px dashed var(--border-default)', borderRadius: '12px' }}>
+        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--text-primary)', margin: '0 0 8px 0' }}>
+          Component Search
         </h3>
-        <p className="text-subheadline text-[var(--color-label-secondary)]">
-          Enter at least 2 characters to search
+        <p style={{ color: 'var(--text-secondary)', fontSize: '16px' }}>
+          Enter at least 2 characters to search the mod archives.
         </p>
       </div>
     )
@@ -137,12 +107,12 @@ export function SearchResults() {
   // No results
   if (modrinthQuery.data?.length === 0) {
     return (
-      <div className="text-center py-12 px-4">
-        <h3 className="text-headline text-[var(--color-label-primary)] mb-2">
-          No mods found
+      <div style={{ textAlign: 'center', padding: '48px 16px', border: '1px solid var(--border-default)', borderRadius: '12px', background: 'var(--bg-surface)' }}>
+        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--text-primary)', margin: '0 0 8px 0' }}>
+          No components found
         </h3>
-        <p className="text-subheadline text-[var(--color-label-secondary)]">
-          Try a different search term or adjust your filters
+        <p style={{ color: 'var(--text-secondary)', fontSize: '16px' }}>
+          Try a different search term or adjust your filters.
         </p>
       </div>
     )
@@ -150,7 +120,7 @@ export function SearchResults() {
 
   // Results
   return (
-    <div className="space-y-3" role="list" aria-label="Search results">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }} role="list" aria-label="Search results">
       {modrinthQuery.data?.map((mod) => (
         <ModCard
           key={mod.id}

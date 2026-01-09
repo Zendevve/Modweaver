@@ -1,7 +1,7 @@
 /**
  * Landing Page - The marketing entry for ModWeaver
- * Linear/Modern design with blue accent
- * Hero with ambient lighting + Features + CTA
+ * Aesthetic: Digital Craftsman's Workshop
+ * Warm, inviting, and professional.
  */
 
 import { SignInButton, SignUpButton, useAuth } from '@clerk/clerk-react'
@@ -17,24 +17,24 @@ const hasValidClerkKey = CLERK_PUBLISHABLE_KEY &&
 // Features data
 const features = [
   {
-    icon: '🔍',
-    title: 'Unified Search',
-    description: 'Search Modrinth and CurseForge simultaneously. Find any mod across platforms in one place.',
+    icon: '⚒️',
+    title: 'Precision Tools',
+    description: 'Search Modrinth and CurseForge simultaneously. Find exactly the parts you need for your creation.',
   },
   {
-    icon: '📦',
-    title: 'Multi-Format Export',
-    description: 'Export to MRPACK, CurseForge, or Packwiz. Works with any launcher you prefer.',
+    icon: '📜',
+    title: 'Universal Blueprints',
+    description: 'Export to MRPACK, CurseForge, or Packwiz. Your creations work on any launcher.',
   },
   {
     icon: '☁️',
-    title: 'Cloud Saved',
-    description: 'Your modpacks sync automatically. Access your work from anywhere, anytime.',
+    title: 'Cloud Archive',
+    description: 'Your projects sync automatically. Your workbench follows you, wherever you go.',
   },
   {
     icon: '⚡',
-    title: 'Blazing Fast',
-    description: 'Built for speed with modern web technologies. No bloat, no waiting.',
+    title: 'Forged for Speed',
+    description: 'Built with modern tech. No bloat, just a clean, responsive workspace.',
   },
 ]
 
@@ -56,29 +56,25 @@ export function Landing() {
   }, [isSignedIn, navigate])
 
   return (
-    <div className="landing">
+    <div className="landing texture-paper">
       {/* Hero Section */}
       <section className="landing-hero">
         <div className="hero-badge">
           <span className="badge">
-            <span>✨</span>
-            Now in Beta
+            <span>🕯️</span>
+            The Artisan Beta
           </span>
         </div>
 
         <h1 className="hero-title">
-          <span className="text-gradient">
-            The modpack suite
-          </span>
+          <span className="text-secondary">Craft your</span>
           <br />
-          <span className="text-gradient-accent">
-            built for creators
-          </span>
+          <span className="text-accent">Masterpiece.</span>
         </h1>
 
         <p className="hero-description">
-          Create, manage, and share Minecraft modpacks with a professional tool
-          that's as powerful as it is beautiful. Search all platforms, export anywhere.
+          The refined workbench for Minecraft modpack creators.
+          Gather your materials, forge your connections, and share your vision with the world.
         </p>
 
         <div className="hero-actions">
@@ -86,12 +82,12 @@ export function Landing() {
             <>
               <SignUpButton mode="modal">
                 <button className="btn btn-primary btn-lg">
-                  Get Started Free
+                  Enter the Workshop
                 </button>
               </SignUpButton>
               <SignInButton mode="modal">
                 <button className="btn btn-secondary btn-lg">
-                  Sign In
+                  Open Logbook
                 </button>
               </SignInButton>
             </>
@@ -101,13 +97,13 @@ export function Landing() {
                 className="btn btn-primary btn-lg"
                 onClick={() => navigate('/editor')}
               >
-                Try the Editor
+                Try the Workbench
               </button>
               <button
                 className="btn btn-secondary btn-lg"
                 onClick={() => navigate('/dashboard')}
               >
-                View Dashboard
+                View Plans
               </button>
             </>
           )}
@@ -119,38 +115,39 @@ export function Landing() {
             <span className="preview-dot red"></span>
             <span className="preview-dot yellow"></span>
             <span className="preview-dot green"></span>
+            <div style={{ marginLeft: '12px', fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'monospace' }}>
+              ~/workspace/new_project
+            </div>
           </div>
           <div className="preview-content">
             <div className="preview-sidebar">
               <div style={{
                 height: '32px',
-                background: 'var(--background-surface)',
+                background: 'var(--bg-surface-hover)',
                 borderRadius: '6px',
-                marginBottom: '8px'
+                marginBottom: '12px',
+                border: '1px solid var(--border-default)'
               }}></div>
               <div style={{
-                height: '28px',
+                height: '24px',
                 background: 'var(--accent-subtle)',
-                borderRadius: '6px',
-                marginBottom: '4px'
+                borderRadius: '4px',
+                marginBottom: '8px',
+                width: '80%'
               }}></div>
               <div style={{
-                height: '28px',
-                background: 'var(--background-surface)',
-                borderRadius: '6px',
-                marginBottom: '4px'
-              }}></div>
-              <div style={{
-                height: '28px',
-                background: 'var(--background-surface)',
-                borderRadius: '6px'
+                height: '24px',
+                background: 'transparent',
+                borderRadius: '4px',
+                marginBottom: '8px',
+                border: '1px dashed var(--border-default)',
+                width: '60%'
               }}></div>
             </div>
             <div className="preview-main">
-              <div className="preview-card"></div>
-              <div className="preview-card"></div>
-              <div className="preview-card"></div>
-              <div className="preview-card"></div>
+              <div className="preview-card" style={{ opacity: 0.8 }}></div>
+              <div className="preview-card" style={{ opacity: 0.6 }}></div>
+              <div className="preview-card" style={{ opacity: 0.4 }}></div>
             </div>
           </div>
         </div>
@@ -160,11 +157,12 @@ export function Landing() {
       <section className="landing-features">
         <div className="features-header">
           <span className="section-label">
-            <span>⚙️</span>
-            Features
+            <span>⚒️</span>
+            The Toolkit
           </span>
-          <h2 className="features-title text-gradient">
-            Everything you need, nothing you don't
+          <h2 className="features-title">
+            Everything you need<br />
+            <span className="text-secondary" style={{ fontSize: '0.8em', fontStyle: 'italic' }}>to build the extraordinary</span>
           </h2>
         </div>
 
@@ -181,16 +179,16 @@ export function Landing() {
 
       {/* CTA Section */}
       <section className="landing-cta">
-        <h2 className="cta-title text-gradient">
-          Ready to build something amazing?
+        <h2 className="cta-title">
+          Ready to light the forge?
         </h2>
         <p className="cta-description">
-          Join creators who are building the next generation of modpacks.
+          Join a guild of creators building the next generation of experiences.
         </p>
         {hasValidClerkKey ? (
           <SignUpButton mode="modal">
             <button className="btn btn-primary btn-lg">
-              Start Building — It's Free
+              Begin Your Craft — It's Free
             </button>
           </SignUpButton>
         ) : (
@@ -198,7 +196,7 @@ export function Landing() {
             className="btn btn-primary btn-lg"
             onClick={() => navigate('/editor')}
           >
-            Try the Editor Now
+            Open the Workbench
           </button>
         )}
       </section>
@@ -206,7 +204,7 @@ export function Landing() {
       {/* Footer */}
       <footer className="landing-footer">
         <p>
-          Built with ❤️ for the Minecraft modding community
+          Handcrafted with ❤️ for the Minecraft modding community
           <br />
           <span style={{ opacity: 0.6 }}>
             Not affiliated with Mojang, CurseForge, or Modrinth.
