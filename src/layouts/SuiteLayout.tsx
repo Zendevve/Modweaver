@@ -1,11 +1,18 @@
 /**
  * SuiteLayout - The main shell for authenticated users
  * Professional sidebar navigation with user context
+ * Works in dev mode without Clerk
  */
 
 import { useState } from 'react'
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { UserButton, useAuth } from '@clerk/clerk-react'
+import { Outlet, NavLink } from 'react-router-dom'
+import { UserButton } from '@clerk/clerk-react'
+
+// Check if we have a valid Clerk key
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const hasValidClerkKey = CLERK_PUBLISHABLE_KEY &&
+  CLERK_PUBLISHABLE_KEY !== 'pk_test_placeholder' &&
+  CLERK_PUBLISHABLE_KEY.startsWith('pk_')
 
 const navItems = [
   { to: '/dashboard', label: 'My Packs', icon: '📦' },
@@ -14,15 +21,7 @@ const navItems = [
 ]
 
 export function SuiteLayout() {
-  const { isLoaded, isSignedIn } = useAuth()
-  const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(true)
-
-  // Redirect to landing if not signed in
-  if (isLoaded && !isSignedIn) {
-    navigate('/')
-    return null
-  }
 
   return (
     <div className="suite-shell">
@@ -60,16 +59,20 @@ export function SuiteLayout() {
         </nav>
 
         <div className="sidebar-footer">
-          <UserButton
-            afterSignOutUrl="/"
-            appearance={{
-              elements: {
-                avatarBox: 'w-10 h-10'
-              }
-            }}
-          />
-          {sidebarOpen && (
-            <span className="user-label">Account</span>
+          {hasValidClerkKey ? (
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  avatarBox: 'w-10 h-10'
+                }
+              }}
+            />
+          ) : (
+            <div className="dev-mode-badge">
+              <span>🛠️</span>
+              {sidebarOpen && <span className="user-label">Dev Mode</span>}
+            </div>
           )}
         </div>
       </aside>

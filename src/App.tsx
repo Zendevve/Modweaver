@@ -1,6 +1,7 @@
 /**
  * ModWeaver App
  * Root application with Clerk auth and React Router
+ * Supports running without Clerk key for development
  */
 
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react'
@@ -18,8 +19,13 @@ import { Editor } from './pages/Editor'
 // Clerk publishable key (from environment)
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
-if (!CLERK_PUBLISHABLE_KEY) {
-  console.warn('Missing VITE_CLERK_PUBLISHABLE_KEY - Auth will not work')
+// Check if we have a valid Clerk key
+const hasValidClerkKey = CLERK_PUBLISHABLE_KEY &&
+  CLERK_PUBLISHABLE_KEY !== 'pk_test_placeholder' &&
+  CLERK_PUBLISHABLE_KEY.startsWith('pk_')
+
+if (!hasValidClerkKey) {
+  console.warn('⚠️ No valid Clerk key found - running in DEV MODE (no auth)')
 }
 
 const queryClient = new QueryClient({
@@ -31,9 +37,43 @@ const queryClient = new QueryClient({
   },
 })
 
-function App() {
+/**
+ * Dev Mode App - No Clerk authentication
+ * All routes accessible, skip landing page
+ */
+function DevModeApp() {
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY || 'pk_test_placeholder'}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {/* Dev mode: Go straight to editor */}
+          <Route path="/" element={<Navigate to="/editor" replace />} />
+
+          {/* Suite routes - no auth protection */}
+          <Route element={<SuiteLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/editor" element={<Editor />} />
+            <Route path="/editor/new" element={<Editor />} />
+            <Route path="/editor/:packId" element={<Editor />} />
+          </Route>
+
+          {/* Show landing for preview */}
+          <Route path="/landing" element={<Landing />} />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/editor" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
+  )
+}
+
+/**
+ * Production App - Full Clerk authentication
+ */
+function ProductionApp() {
+  return (
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
@@ -78,6 +118,15 @@ function App() {
       </QueryClientProvider>
     </ClerkProvider>
   )
+}
+
+function App() {
+  // Use dev mode if no valid Clerk key
+  if (!hasValidClerkKey) {
+    return <DevModeApp />
+  }
+
+  return <ProductionApp />
 }
 
 export default App
